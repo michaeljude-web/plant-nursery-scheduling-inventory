@@ -8,15 +8,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contact_number = trim($_POST['contact_number']);
     $address = trim($_POST['address']);
     $role = trim($_POST['role']);
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
     $errors = [];
 
-    if (!preg_match("/^[a-zA-Z ]+$/", $firstname)) {
-        $errors[] = "First name should contain only letters.";
+    if (!preg_match("/^[a-zA-Z ]*$/", $firstname)) {
+        $errors[] = "First name should contain only letters and spaces.";
     }
 
-    if (!preg_match("/^[a-zA-Z ]+$/", $lastname)) {
-        $errors[] = "Last name should contain only letters.";
+    if (!preg_match("/^[a-zA-Z ]*$/", $lastname)) {
+        $errors[] = "Last name should contain only letters and spaces.";
     }
 
     if (!is_numeric($age) || $age < 18) {
@@ -27,23 +29,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Contact number should contain only numbers.";
     }
 
-    if (empty($errors)) {
-        $sql = "INSERT INTO staff (firstname, lastname, age, contact_number, address, role)
-                VALUES ('$firstname', '$lastname', '$age', '$contact_number', '$address', '$role')";
+    // if (strlen($username) < 5) {
+    //     $errors[] = "Username must be at least 5 characters long.";
+    // }
 
-        if ($conn->query($sql) === TRUE) {
+    // if (strlen($password) < 6) {
+    //     $errors[] = "Password must be at least 6 characters long.";
+    // }
+
+    $stmt = $conn->prepare("SELECT id FROM staff WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows > 0) {
+        $errors[] = "Username already taken.";
+    }
+    $stmt->close();
+
+    if (empty($errors)) {
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "INSERT INTO staff (firstname, lastname, age, contact_number, address, role, username, password)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssisssss", $firstname, $lastname, $age, $contact_number, $address, $role, $username, $hashed_password);
+
+        if ($stmt->execute()) {
             $message = "New staff added successfully!";
         } else {
-            $message = "Error: " . $sql . "<br>" . $conn->error;
+            $message = "Error: " . $stmt->error;
         }
+
+        $stmt->close();
     } else {
         $message = implode("<br>", $errors);
     }
 }
 
 $conn->close();
-
 ?>
+
 
 
 <!DOCTYPE html>
@@ -134,22 +159,24 @@ $conn->close();
                 </div>
             </div>
 
+            <div class="row mb-3">
+    <div class="col">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+    <div class="col">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+</div>
+
+
             <div class="d-flex justify-content-between gap-4">
                 <button type="submit" class="btn btn-primary w-50">Add Staff</button>
-                <a href="#" class="btn btn-secondary w-50 text-white text-decoration-none text-center">View Staff</a>
+                <a href="admin_employee_view.php" class="btn btn-secondary w-50 text-white text-decoration-none text-center">View Staff</a>
             </div>
         </form>
     </div>
     
-    <!-- <script>
-        function toggleSidebar() {
-            var sidebar = document.getElementById("sidebar");
-            if (sidebar.style.width === "250px") {
-                sidebar.style.width = "80px";
-            } else {
-                sidebar.style.width = "250px";
-            }
-        }
-    </script> -->
 </body>
 </html>
