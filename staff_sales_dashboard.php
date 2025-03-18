@@ -9,24 +9,16 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <?php
-include 'includes/sidebar.php'
-    ?>
-    
+<div class="sidebar p-3" id="sidebar">
+        <div class="logo">Staff Sales</div>
+        <a href="sales_dashboard.php"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+        <a href="sales_add_seeds.php"><i class="fas fa-leaf"></i> <span>Plants/Seeds</span></a>
+        <a href="sales_login.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+    </div>
     <div class="content">
         <h1>Dashboard</h1>
   
     </div>
-    <script>
-        function toggleSidebar() {
-            var sidebar = document.getElementById("sidebar");
-            if (sidebar.style.width === "250px") {
-                sidebar.style.width = "80px";
-            } else {
-                sidebar.style.width = "250px";
-            }
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
