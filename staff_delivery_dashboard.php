@@ -3,30 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff | Delivery</title>
+    <title></title>
     <link rel="stylesheet" href="assets/bootstrap-5/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fontawesome-6.7/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <?php
-include 'includes/sidebar.php'
-    ?>
-    
-    <div class="content">
-        <h1>Dashboard</h1>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <div>
+                <a class="nav-link d-inline" href="#"><i class="fa-solid fa-calendar"></i> Calendar</a>
+                <a class="nav-link d-inline" href="#"><i class="fa-solid fa-users"></i> Team</a>
+            </div>
+        </div>
+    </nav>
 
-    </div>
-    <script>
-        function toggleSidebar() {
-            var sidebar = document.getElementById("sidebar");
-            if (sidebar.style.width === "250px") {
-                sidebar.style.width = "80px";
-            } else {
-                sidebar.style.width = "250px";
-            }
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <script src="assets/bootstrap-5/js/bootstrap.bundle.min.js"></script>
 </html>
