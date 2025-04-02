@@ -20,8 +20,8 @@
                 <i class="fas fa-users me-2"></i> Staffs
             </a>
             <ul class="collapse list-unstyled ps-3" id="usersMenu">
-                <li><a class="nav-link text-dark" href="admin_staff_add.php">Add Staff</a></li>
-                <li><a class="nav-link text-dark" href="admin_staff_list.php">Staff List</a></li>
+                <li><a class="nav-link text-dark" href="admin_employee_add.php">Add Employee</a></li>
+                <li><a class="nav-link text-dark" href="admin_employee_list.php">Employee List</a></li>
             </ul>
         </li>
         <li class="nav-item">
@@ -32,7 +32,6 @@
     </ul>
 </nav>
 
-<!-- Mobile Sidebar Button -->
 <div class="d-flex align-items-center d-md-none px-3 py-2 bg-primary text-white">
     <button class="btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
         <i class="fas fa-bars"></i>
@@ -40,7 +39,7 @@
     <h5 class="mb-0">Plant Nursery</h5>
 </div>
 
-<!-- Mobile Sidebar (Offcanvas) -->
+<!-- Mobile -->
 <div class="offcanvas offcanvas-start bg-light" id="mobileSidebar">
     <div class="offcanvas-header bg-danger text-black">
         <h5 class="offcanvas-title">Plant Nursery</h5>

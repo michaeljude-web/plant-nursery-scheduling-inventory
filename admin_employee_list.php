@@ -1,9 +1,12 @@
+<?php 
+include 'includes/db.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin | Staff List</title>
+    <title>Admin | Employee</title>
     <link rel="stylesheet" href="assets/bootstrap-5/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fontawesome-6.7/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css?v=2">
@@ -17,12 +20,12 @@
         <?php include 'includes/sidebar.php'; ?>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h2 class="mt-4">Staff List</h2>
+            <h2 class="mt-4">Employee List</h2>
             <div class="container mt-4">
 
             <div class="row mb-3">
     <div class="col-md-6">
-        <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search staff...">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search employee...">
     </div>
           <div class="col-md-6">
              <select id="roleFilter" class="form-select">
@@ -48,12 +51,8 @@
                         </thead>
                         <tbody id="staffTable">
                             <?php
-                            $conn = new mysqli("localhost", "root", "", "sad");
-                            if ($conn->connect_error) {
-                                die("<tr><td colspan='8' class='text-center text-danger'>Connection failed: " . $conn->connect_error . "</td></tr>");
-                            }
-
-                            $sql = "SELECT id, firstname, lastname, age, contact_number, address, role, username FROM staff ORDER BY id ASC";
+include 'includes/db.php';
+                            $sql = "SELECT id, firstname, lastname, age, contact_number, address, role, username FROM employee_info ORDER BY id ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0) {
@@ -92,7 +91,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Edit Staff</h5>
+                            <h5 class="modal-title">Edit Employee Info</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -161,7 +160,7 @@
 
         $.ajax({
             type: "POST",
-            url: "actions/update_staff.php",
+            url: "actions/update_employee.php",
             data: {
                 id: $("#editId").val(),
                 firstname: $("#editFirstname").val(),
@@ -172,7 +171,7 @@
             },
             success: function (response) {
                 if (response === "success") {
-                    alert("Staff updated successfully!");
+                    alert("Employee updated successfully!");
                     location.reload();
                 } else {
                     alert("Error updating staff.");
@@ -186,12 +185,12 @@
 
         if (confirm("Are you sure you want to delete this staff?")) {
             $.ajax({
-                url: "actions/delete_staff.php",
+                url: "actions/delete_employee.php",
                 type: "GET",
                 data: { id: id },
                 success: function (response) {
                     if (response === "success") {
-                        alert("Staff deleted successfully!");
+                        alert("Employee deleted successfully!");
                         location.reload();
                     } else {
                         alert("Error deleting staff.");

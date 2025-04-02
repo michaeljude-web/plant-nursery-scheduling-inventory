@@ -1,16 +1,16 @@
 <?php
 include 'includes/db.php';
 
-$categoryQuery = "SELECT * FROM categories";
+$categoryQuery = "SELECT * FROM seedling_category";
 $categoryResult = $conn->query($categoryQuery);
 
-$seedQuery = "SELECT * FROM seeds";
+$seedQuery = "SELECT * FROM seedling_info";
 $seedResult = $conn->query($seedQuery);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_category'])) {
     $category_name = trim($_POST['category_name']);
     if (!empty($category_name)) {
-        $stmt = $conn->prepare("INSERT INTO categories (category_name) VALUES (?)");
+        $stmt = $conn->prepare("INSERT INTO seedling_category (category_name) VALUES (?)");
         $stmt->bind_param("s", $category_name);
         if ($stmt->execute()) {
             echo "<script>alert('Category Added!');</script>";
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_seedname'])) {
     $seed_name = trim($_POST['seed_name']);
     $category_id = $_POST['category'];
     if (!empty($seed_name) && !empty($category_id)) {
-        $stmt = $conn->prepare("INSERT INTO seeds (category_id, seed_name) VALUES (?, ?)");
+        $stmt = $conn->prepare("INSERT INTO seedling_info (category_id, seed_name) VALUES (?, ?)");
         $stmt->bind_param("is", $category_id, $seed_name);
         if ($stmt->execute()) {
             echo "<script>alert('Seed Name Added!');</script>";
@@ -37,7 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_seed'])) {
     $price = $_POST['price'];
 
     if (!empty($category_id) && !empty($seed_id) && !empty($variety_name) && !empty($price)) {
-        $stmt = $conn->prepare("INSERT INTO seed_varieties (seed_id, variety_name, price) VALUES (?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO seedling_variety (seed_id, variety_name, price) VALUES (?, ?, ?)");
+
         $stmt->bind_param("isd", $seed_id, $variety_name, $price);
         if ($stmt->execute()) {
             echo "<script>alert('Seed & Variety Added!'); window.location.href='admin_seeds_add.php';</script>";

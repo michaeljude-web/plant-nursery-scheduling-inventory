@@ -1,4 +1,6 @@
 <?php
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 include 'includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Contact number should contain only numbers.";
     }
 
-    $stmt = $conn->prepare("SELECT id FROM staff WHERE username = ?");
+    $stmt = $conn->prepare("SELECT id FROM employee_info WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->store_result();
@@ -40,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO staff (firstname, lastname, age, contact_number, address, role, username, password)
+        $sql = "INSERT INTO employee_info (firstname, lastname, age, contact_number, address, role, username, password)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($sql);
@@ -67,7 +69,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin | Staff</title>
+    <title>Admin | Employee</title>
     <link rel="stylesheet" href="assets/bootstrap-5/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fontawesome-6.7/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css?v=2">
@@ -80,7 +82,7 @@ $conn->close();
         <?php include 'includes/sidebar.php'; ?>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h2 class="mt-4">Add Staff</h2>
+            <h2 class="mt-4">Add Employee</h2>
             <?php if (isset($message)) : ?>
    <?php echo $message; ?>
 <?php endif; ?>
@@ -131,7 +133,7 @@ $conn->close();
          </div>
       </div>
       <div class="d-flex justify-content-between gap-4">
-         <button type="submit" class="btn btn-primary w-50">Add Staff</button>
+         <button type="submit" class="btn btn-primary w-50">Add Employee</button>
       </div>
    </form>
         </main>

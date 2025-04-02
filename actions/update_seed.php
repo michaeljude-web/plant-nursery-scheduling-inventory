@@ -6,10 +6,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $seed_name = $_POST['edit_seed_name'];
     $price = $_POST['edit_price'];
 
-    $sql = "UPDATE seed_varieties sv
-            JOIN seeds s ON sv.seed_id = s.id
-            SET s.seed_name = ?, sv.price = ?
-            WHERE sv.id = ?";
+    $sql = "UPDATE seedling_variety sv
+    JOIN seedling_info si ON sv.seed_id = si.id
+    SET si.seed_name = ?, sv.price = ?
+    WHERE sv.id = ?";
+
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssi", $seed_name, $price, $id);

@@ -26,7 +26,7 @@
                         <option value="">Filter by Category</option>
                         <?php
                         include 'includes/db.php';
-                        $categoryQuery = "SELECT DISTINCT category_name FROM categories";
+                        $categoryQuery = "SELECT DISTINCT category_name FROM seedling_category";
                         $categoryResult = $conn->query($categoryQuery);
                         while ($category = $categoryResult->fetch_assoc()) {
                             echo "<option value='{$category['category_name']}'>{$category['category_name']}</option>";
@@ -48,11 +48,11 @@
                 </thead>
                 <tbody id="seedTable">
                     <?php
-                    $sql = "SELECT sv.id, s.seed_name, sv.variety_name, c.category_name, sv.price 
-                            FROM seed_varieties sv
-                            JOIN seeds s ON sv.seed_id = s.id
-                            JOIN categories c ON s.category_id = c.id
-                            ORDER BY s.seed_name, sv.variety_name";
+                    $sql = "SELECT sv.id, si.seed_name, sv.variety_name, sc.category_name, sv.price 
+                            FROM seedling_variety sv
+                            JOIN seedling_info si ON sv.seed_id = si.id
+                            JOIN seedling_category sc ON si.category_id = sc.id
+                            ORDER BY si.seed_name, sv.variety_name";
                     
                     $result = $conn->query($sql);
                     
@@ -62,9 +62,9 @@
                                     <td>{$row['seed_name']}</td>
                                     <td>{$row['variety_name']}</td> 
                                     <td>{$row['category_name']}</td>
-                                    <td>" . intval($row['price']) . "</td>
+                                    <td>" . number_format($row['price'], 2) . "</td>
                                     <td>
-                                        <button class='btn btn-warning btn-sm' onclick='openEditModal({$row['id']}, \"{$row['seed_name']}\", \"{$row['price']}\")'>
+                                        <button class='btn btn-warning btn-sm' onclick='openEditModal({$row['id']}, \"{$row['seed_name']}\", \"{$row['variety_name']}\", \"{$row['price']}\")'>
                                             <i class='fas fa-edit'></i> Edit
                                         </button>
                                         <button onclick='confirmDelete({$row['id']})' class='btn btn-danger btn-sm'>
@@ -82,6 +82,7 @@
         </main>
     </div>
 </section>
+
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -127,19 +128,20 @@
     });
 
     function confirmDelete(id) {
-        if (confirm("Are you sure you want to delete this seed?")) {
-            $.post("actions/delete_seed.php", { id: id }, function(response) {
-                if (response.trim() === "success") {
-                    alert("Seed has been deleted.");
-                    $("tr[data-seed-id='" + id + "']").fadeOut(300, function () {
-                        $(this).remove();
-                    });
-                } else {
-                    alert("Failed to delete seed.");
-                }
-            });
-        }
+    if (confirm("Are you sure you want to delete this seed?")) {
+        $.post("actions/delete_seed.php", { id: id }, function(response) {
+            if (response.trim() === "success") {
+                alert("Seed has been deleted.");
+                $("tr[data-seed-id='" + id + "']").fadeOut(300, function () {
+                    $(this).remove();
+                });
+            } else {
+                alert("Failed to delete seed.");
+            }
+        });
     }
+}
+
 
     function openEditModal(id, seedName, price) {
         $("#edit_id").val(id);

@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contact = $_POST['contact'];
     $address = $_POST['address'];
 
-    $sql = "UPDATE staff SET firstname=?, lastname=?, age=?, contact_number=?, address=? WHERE id=?";
+    $sql = "UPDATE employee_info SET firstname=?, lastname=?, age=?, contact_number=?, address=? WHERE id=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssissi", $firstname, $lastname, $age, $contact, $address, $id);
 
