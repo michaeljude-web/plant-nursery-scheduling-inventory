@@ -24,6 +24,21 @@
                 <li><a class="nav-link text-dark" href="admin_employee_list.php">Employee List</a></li>
             </ul>
         </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link text-dark" href="admin_seedling_inventory.php">
+            <i class="fa-solid fa-boxes-stacked me-2 me-2"></i> Inventory
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link text-dark" href="admin_damage_report.php">
+            <i class="fas fa-triangle-exclamation me-2"></i> Reports
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link text-dark" href="admin_delivery_history.php">
+            <i class="fa-solid fa-cart-shopping me-2"></i> Order History
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link text-danger" href="">
                 <i class="fas fa-sign-out-alt me-2"></i> Logout

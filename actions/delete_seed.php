@@ -1,20 +1,19 @@
 <?php
 include '../includes/db.php';
+file_put_contents('log.txt', print_r($_POST, true));
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["id"])) {
-    $id = intval($_POST["id"]);
-    
-    $stmt = $conn->prepare("DELETE FROM seedling_variety WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    
+if (isset($_POST['id'])) {
+    $id = intval($_POST['id']);
 
-    if ($stmt->execute()) {
+    $sql = "DELETE FROM seedling_variety WHERE id = $id";
+
+    if ($conn->query($sql)) {
         echo "success";
     } else {
-        echo "error";
+        echo "error: " . $conn->error;
     }
-    
-    $stmt->close();
-    $conn->close();
+} else {
+    echo "invalid";
 }
 ?>
+

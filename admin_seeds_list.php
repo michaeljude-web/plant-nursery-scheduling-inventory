@@ -15,7 +15,7 @@
     <div class="row">
         <?php include 'includes/sidebar.php'; ?>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h2 class="mt-4">List of Seed Varieties</h2>
+            <h2 class="mt-4">List of Seedling Varieties</h2> <hr>
             
             <div class="row mb-3">
                 <div class="col-md-4">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-md-4">
                     <select id="filterCategory" class="form-select">
-                        <option value="">Filter by Category</option>
+                        <option value="">All Category</option>
                         <?php
                         include 'includes/db.php';
                         $categoryQuery = "SELECT DISTINCT category_name FROM seedling_category";
@@ -58,7 +58,8 @@
                     
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
-                            echo "<tr class='seedRow' data-seed='{$row['seed_name']}' data-category='{$row['category_name']}'>
+                            echo "<tr class='seedRow' data-seed='{$row['seed_name']}' data-category='{$row['category_name']}' data-seed-id='{$row['id']}'>
+
                                     <td>{$row['seed_name']}</td>
                                     <td>{$row['variety_name']}</td> 
                                     <td>{$row['category_name']}</td>
@@ -84,7 +85,6 @@
 </section>
 
 
-<!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -141,6 +141,7 @@
         });
     }
 }
+
 
 
     function openEditModal(id, seedName, price) {

@@ -1,6 +1,7 @@
 <?php 
 include 'includes/db.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,8 +21,7 @@ include 'includes/db.php';
         <?php include 'includes/sidebar.php'; ?>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h2 class="mt-4">Employee List</h2>
-            <div class="container mt-4">
+            <h2 class="mt-4">Employee List</h2> <hr>
 
             <div class="row mb-3">
     <div class="col-md-6">
@@ -51,7 +51,7 @@ include 'includes/db.php';
                         </thead>
                         <tbody id="staffTable">
                             <?php
-include 'includes/db.php';
+                             include 'includes/db.php';
                             $sql = "SELECT id, firstname, lastname, age, contact_number, address, role, username FROM employee_info ORDER BY id ASC";
                             $result = $conn->query($sql);
 
