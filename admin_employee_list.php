@@ -179,7 +179,8 @@ include 'includes/db.php';
             },
         });
     });
-
+    
+    //Delete
     $(".delete-btn").on("click", function () {
         var id = $(this).data("id");
 

@@ -26,22 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .underline-input {
-            border: none;
-            border-bottom: 1px solid #999;
-            outline: none;
-            background: transparent;
-            width: 100%;
-            padding: 8px;
-        }
-        .underline-input:focus {
-            border-bottom: 1px solid #666;
-            outline: none;
-            box-shadow: none;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/bootstrap-5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
     <div class="container">

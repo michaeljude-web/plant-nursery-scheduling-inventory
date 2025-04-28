@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -7,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password']);
     $role = trim($_POST['role']);
 
-    $stmt = $conn->prepare("SELECT id, password, role FROM staff WHERE username = ? AND role = ?");
+    $stmt = $conn->prepare("SELECT id, password, role FROM employee_info WHERE username = ? AND role = ?");
     $stmt->bind_param("ss", $username, $role);
     $stmt->execute();
     $stmt->store_result();
@@ -48,7 +47,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Employee Login</title>
     <link rel="stylesheet" href="assets/bootstrap-5/css/bootstrap.min.css">
 </head>
 <body>

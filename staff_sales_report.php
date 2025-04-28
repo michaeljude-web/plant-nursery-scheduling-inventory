@@ -67,41 +67,34 @@ while ($row = $result->fetch_assoc()) {
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg border-bottom">
-      <div class="container">
+  <nav class="navbar navbar-expand-lg border-bottom">
+    <div class="container">
         <a class="navbar-brand fw-bold text-primary">Plant Nursery</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="staff_sales_plot.php">Plots</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="staff_sales_inventory.php">Inventory</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="staff_sales_delivery.php">Delivery</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="staff_sales_report.php">Reports</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="staff_login.php"">
-            <i class="fas fa-sign-out-alt"></i>
-              </a>
-            </li>
-          </ul>
+                    <a class="nav-link" href="staff_sales_plot.php">Plots</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="staff_sales_inventory.php">Inventory</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="scheduleDropdown" data-bs-toggle="dropdown">
+                        Orders
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="scheduleDropdown">
+                        <li><a class="dropdown-item" href="staff_sales_orders.php">Add Order</a></li>
+                        <li><a class="dropdown-item" href="staff_sales_reserve_orders.php">Reserve Order</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item active"><a class="nav-link" href="staff_sales_report.php">Reports</a></li>
+            </ul>
         </div>
-      </div>
-    </nav>
+    </div>
+</nav>
     
     <div class="container my-5">
         <h3 class="mb-4 text-center">Damage Reports</h3>

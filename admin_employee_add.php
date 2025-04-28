@@ -114,8 +114,8 @@ $conn->close();
          <div class="col">
             <label for="role" class="form-label">Role</label>
             <select class="form-select" id="role" name="role" required>
-               <option value="Sales Team">Sales Team</option>
-               <option value="Delivery Staff">Delivery Staff</option>
+               <option value="Sales Team">Sales</option>
+               <option value="Delivery Staff">Delivery</option>
                <option value="Nutritionist">Nutritionist</option>
             </select>
          </div>
