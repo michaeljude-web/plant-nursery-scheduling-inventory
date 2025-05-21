@@ -27,67 +27,89 @@ $category_result = mysqli_query($conn, "SELECT * FROM fertilizer_category ORDER 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin | Fertilizers</title>
-    <link rel="stylesheet" href="assets/bootstrap-5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/fontawesome-6.7/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css?v=2">
-    <script src="assets/jquery/jquery-3.6.0.min.js"></script>
-    <style>
-        .low-stock {
-            background-color: #f8d7da; 
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin | Fertilizers</title>
+  <link rel="stylesheet" href="assets/bootstrap-5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/fontawesome-6.7/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=2">
+  <script src="assets/jquery/jquery-3.6.0.min.js"></script>
+  <style>
+    .low-stock {
+        background-color: #f8d7da !important;
+    }
+
+    .fertilizer-card {
+        border-radius: 5px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid gray;
+    }
+
+    .filter-search-container {
+        flex-wrap: wrap;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+    }
+  </style>
 </head>
 <body>
 
 <section class="container-fluid">
-    <div class="row">
-        <?php include 'includes/sidebar.php'; ?>
+  <div class="row">
+    <?php include 'includes/sidebar.php'; ?>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h2 class="mt-4">Fertilizer Inventory</h2> <hr>
-            <div class="container">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <h2 class="mt-4"><span><a href="admin_seedling_inventory.php" class="text-decoration-none text-primary">Seedling Inventory</a></span>
+            | Fertilizer Inventory
+            </h2> 
+            <hr>
 
-   <div class="d-flex mb-4 filter-search-container">
-      <div class="form-group me-2" style="flex: 0 0 auto; width: 250px;">
-          <select id="categoryFilter" class="form-select">
-            <option value="">All Categories</option>
-            <?php 
-            mysqli_data_seek($category_result, 0);
-            while ($cat = mysqli_fetch_assoc($category_result)): ?>
+      <div class="container">
+
+        <div class="d-flex mb-4 filter-search-container">
+          <div class="form-group me-2" style="flex: 0 0 auto; width: 250px;">
+            <select id="categoryFilter" class="form-select">
+              <option value="">All Categories</option>
+              <?php 
+              mysqli_data_seek($category_result, 0);
+              while ($cat = mysqli_fetch_assoc($category_result)): ?>
                 <option value="<?= $cat['category_id'] ?>"><?= htmlspecialchars($cat['category_name']) ?></option>
-            <?php endwhile; ?>
-          </select>
-      </div>
-      <div class="form-group flex-grow-1">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search fertilizer..." />
-       </div>
-    </div>
+              <?php endwhile; ?>
+            </select>
+          </div>
+          <div class="form-group flex-grow-1">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search fertilizer..." />
+          </div>
+        </div>
 
-    <div id="fertilizerContainer">
-        <?php while ($row = mysqli_fetch_assoc($result)) : ?>
-            <div class="card mb-3 fertilizer-card <?= ($row['total_quantity'] <= 5) ? 'low-stock' : '' ?>" 
-                 data-name="<?= strtolower($row['fertilizer_name']) ?>" 
-                 data-category="<?= strtolower($row['category_name']) ?>" 
-                 data-quantity="<?= $row['total_quantity'] ?>">
-                <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
-                    <div>
-                        <h5 class="mb-1"><?= htmlspecialchars($row['fertilizer_name']) ?></h5>
-                        <small class="text-muted"><?= htmlspecialchars($row['category_name']) ?></small><br>
-                        <strong class="stock-quantity" id="stock-<?= $row['fertilizer_id'] ?>" data-stock="<?= $row['total_quantity'] ?>">
-                            Stocks: <?= htmlspecialchars($row['total_quantity']) ?>
-                        </strong>
-                    </div>
+        <div id="fertilizerContainer">
+          <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+            <div class="fertilizer-card <?= ($row['total_quantity'] <= 5) ? 'low-stock' : '' ?>"
+                data-name="<?= strtolower($row['fertilizer_name']) ?>" 
+                data-category="<?= strtolower($row['category_name']) ?>" 
+                data-quantity="<?= $row['total_quantity'] ?>">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="mb-1"><?= htmlspecialchars($row['fertilizer_name']) ?></h5>
+                  <p class="mb-0 text-muted"><?= htmlspecialchars($row['category_name']) ?></p>
+                  <p class="mb-0">
+                    <strong>Stocks:</strong> <?= htmlspecialchars($row['total_quantity']) ?>
+                    <?php if ($row['total_quantity'] <= 5): ?>
+                      <span class="badge bg-danger ms-2">Low</span>
+                    <?php endif; ?>
+                  </p>
                 </div>
+              </div>
             </div>
-        <?php endwhile; ?>
-    </div>
-</div>
+          <?php endwhile; ?>
+        </div>
 
-        </main>
-    </div>
+      </div>
+    </main>
+  </div>
 </section>
 
 <script>

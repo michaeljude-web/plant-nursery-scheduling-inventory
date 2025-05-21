@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['seedling_variety_id'])
     $remaining = $max_allowed - $existing;
 
     if ($plot_count > $remaining) {
-        echo "<script>alert('Cannot add $plot_count plot(s). Only $remaining plot(s) can be added to stay within the 50 plot limit.'); window.location.href='plot.php';</script>";
+        echo "<script>alert('Cannot add $plot_count plot(s). Only $remaining plot(s) can be added to stay within the 50 plot limit.'); window.location.href='staff_sales_plot.php';</script>";
         exit();
     }
 
@@ -23,13 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['seedling_variety_id'])
 
     $current_quantity = 1;
     $quantity_limit = 50;
-    $date_planted = date("Y-m-d");
+    $date_planted = date("Y-m-d H:i:s");
     $status = "Growing";
 
     for ($i = 0; $i < $plot_count; $i++) {
-        $stmt->bind_param("iiiss", $seedling_variety_id, $quantity_limit, $current_quantity, $date_planted, $status);
-        $stmt->execute();
-    }
+    $stmt->bind_param("iiiss", $seedling_variety_id, $quantity_limit, $current_quantity, $date_planted, $status);
+    $stmt->execute();
+}
+
 
     echo "<script>alert('Successfully added $plot_count plot(s).'); window.location.href='staff_sales_plot.php';</script>";
     exit();
@@ -103,55 +104,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transfer_quantity']) &
 }
 
 //report
+// date_default_timezone_set('Asia/Manila');
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_variety_report'])) {
-    $seedling_variety_id = $_POST['seedling_variety_id_report'];
-    $description = $_POST['damage_description'];
-    $damaged_quantity = (int) $_POST['damaged_quantity'];
-    $report_date = date("Y-m-d H:i:s");
+  $seedling_variety_id = $_POST['seedling_variety_id_report'];
+  $description = $_POST['damage_description'];
+  $damaged_quantity = (int) $_POST['damaged_quantity'];
+  $report_date = date("Y-m-d H:i:s");
 
-    $image_path = null;
-    if (isset($_FILES['damage_image']) && $_FILES['damage_image']['error'] === 0) {
-        $target_dir = "uploads/";
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0777, true);
-        }
-        $filename = time() . "_" . basename($_FILES["damage_image"]["name"]);
-        $target_file = $target_dir . $filename;
-        if (move_uploaded_file($_FILES["damage_image"]["tmp_name"], $target_file)) {
-            $image_path = $target_file;
-        }
-    }
+  $image_paths = [];
+  if (isset($_FILES['damage_images']) && $_FILES['damage_images']['error'][0] === 0) {
+      $target_dir = "uploads/";
+      if (!is_dir($target_dir)) {
+          mkdir($target_dir, 0777, true);
+      }
 
-    $plots_sql = $conn->prepare("SELECT plot_id, current_quantity FROM planting_plot WHERE seedling_variety_id = ? ORDER BY plot_id ASC");
-    $plots_sql->bind_param("i", $seedling_variety_id);
-    $plots_sql->execute();
-    $plots_result = $plots_sql->get_result();
+      foreach ($_FILES['damage_images']['name'] as $key => $image_name) {
+          if ($_FILES['damage_images']['error'][$key] === 0) {
+              $filename = time() . "_" . basename($image_name);
+              $target_file = $target_dir . $filename;
 
-    $remaining = $damaged_quantity;
+              if (move_uploaded_file($_FILES["damage_images"]["tmp_name"][$key], $target_file)) {
+                  $image_paths[] = $target_file;
+              }
+          }
+      }
+  }
 
-    while ($plot = $plots_result->fetch_assoc()) {
-        if ($remaining <= 0) {
-            break;
-        }
+  $plots_sql = $conn->prepare("SELECT plot_id, current_quantity FROM planting_plot WHERE seedling_variety_id = ? ORDER BY plot_id ASC");
+  $plots_sql->bind_param("i", $seedling_variety_id);
+  $plots_sql->execute();
+  $plots_result = $plots_sql->get_result();
 
-        $deduct = min($remaining, $plot['current_quantity']);
+  $remaining = $damaged_quantity;
+  $image_index = 0;  
 
-        if ($deduct > 0) {
-            $stmt = $conn->prepare("INSERT INTO inventory_reports (plot_id, report_date, damage_description, image_path, damaged_quantity) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("isssi", $plot['plot_id'], $report_date, $description, $image_path, $deduct); 
-            $stmt->execute();
+  while ($plot = $plots_result->fetch_assoc()) {
+      if ($remaining <= 0) {
+          break;
+      }
 
-            $update = $conn->prepare("UPDATE planting_plot SET current_quantity = current_quantity - ? WHERE plot_id = ?");
-            $update->bind_param("ii", $deduct, $plot['plot_id']);
-            $update->execute();
+      $deduct = min($remaining, $plot['current_quantity']);
 
-            $remaining -= $deduct;
-        }
-    }
+      if ($deduct > 0) {
+          $image_path = isset($image_paths[$image_index]) ? $image_paths[$image_index] : null;
+          $stmt = $conn->prepare("INSERT INTO inventory_reports (plot_id, report_date, damage_description, image_path, damaged_quantity) VALUES (?, ?, ?, ?, ?)");
+          $stmt->bind_param("isssi", $plot['plot_id'], $report_date, $description, $image_path, $deduct);
+          $stmt->execute();
 
-    echo "<script>alert('Damage report submitted and quantity updated successfully.'); window.location.href='staff_sales_plot.php';</script>";
-    exit();
+          $update = $conn->prepare("UPDATE planting_plot SET current_quantity = current_quantity - ? WHERE plot_id = ?");
+          $update->bind_param("ii", $deduct, $plot['plot_id']);
+          $update->execute();
+
+          $remaining -= $deduct;
+
+          $image_index++;
+      }
+  }
+
+  echo "<script>alert('Damage report submitted and quantity updated successfully.'); window.location.href='staff_sales_plot.php';</script>";
+  exit();
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -161,6 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_variety_report'
     <title>EJ's Plant Nursery</title>
     <link rel="stylesheet" href="assets/bootstrap-5/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/fontawesome-6.7/css/all.min.css" />
+    <script src="assets/jquery/jquery-3.6.0.min.js"></script>
     <style>
       .card {
         border-radius: 10px;
@@ -194,6 +209,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_variety_report'
                 <li class="nav-item">
                     <a class="nav-link" href="staff_sales_inventory.php">Inventory</a>
                 </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="staff_sales_fertilizer.php">Fertilizer</a>
+                </li> -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="scheduleDropdown" data-bs-toggle="dropdown">
                         Orders
@@ -203,14 +221,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_variety_report'
                         <li><a class="dropdown-item" href="staff_sales_reserve_orders.php">Reserve Order</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="staff_sales_report.php">Reports</a></li>
+                <!-- <li class="nav-item"><a class="nav-link" href="staff_sales_report.php">Reports</a></li> -->
+                <li class="nav-item"><a class="nav-link" href="staff_login.php"><i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
         </div>
     </div>
 </nav>
 
     <div class="container mt-4">
-      <h2 class="text-center mb-4">Planting Plots</h2>
+      <h2>Planting Plots</h2> <hr>
 
       <div class="row mb-4">
         <div class="col-md-6 mb-2">
@@ -383,7 +402,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_variety_report'
                       </div>
                       <div class="mb-3">
                         <label>Upload Image</label>
-                        <input type="file" name="damage_image" class="form-control" />
+                        <input type="file" name="damage_images[]" accept="image/*" multiple>
                       </div>
                     </div>
                     <div class="modal-footer">
@@ -399,10 +418,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_variety_report'
         <?php endforeach; ?>
       </div>
     </div>
-
-    <script src="assets/bootstrap-5/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
       document.getElementById("searchBar").addEventListener("keyup", function () {
         const val = this.value.toLowerCase();
@@ -422,5 +437,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_variety_report'
           });
         });
     </script>
+    <script src="assets/bootstrap-5/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

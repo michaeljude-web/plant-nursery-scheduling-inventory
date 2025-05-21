@@ -70,6 +70,9 @@ function getInventory($conn, $search, $categoryFilter, $sort) {
         <li class="nav-item">
           <a class="nav-link active" href="staff_sales_inventory.php">Inventory</a>
         </li>
+        <!-- <li class="nav-item">
+                    <a class="nav-link" href="staff_sales_fertilizer.php">Fertilizer</a>
+                </li> -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="scheduleDropdown" data-bs-toggle="dropdown">
             Orders
@@ -80,7 +83,8 @@ function getInventory($conn, $search, $categoryFilter, $sort) {
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="staff_sales_report.php">Reports</a>
+          <!-- <a class="nav-link" href="staff_sales_report.php">Reports</a> -->
+          <li class="nav-item"><a class="nav-link" href="staff_login.php"><i class="fas fa-sign-out-alt"></i></a></li>
         </li>
       </ul>
     </div>
@@ -88,7 +92,9 @@ function getInventory($conn, $search, $categoryFilter, $sort) {
 </nav>
 
 <div class="container mt-4">
-  <h2 class="text-center mb-4">Seedling Inventory</h2>
+      <h2 class="mt-4">Seedling Inventory |
+        <span><a href="staff_sales_fertilizer_inventory.php" class="text-decoration-none text-primary">Fertilizer Inventory</a></span></h2> 
+            <hr>
 
   <!-- Filters -->
   <div class="row mb-3">

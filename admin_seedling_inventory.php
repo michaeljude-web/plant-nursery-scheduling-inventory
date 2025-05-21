@@ -63,7 +63,8 @@ function getInventory($conn, $search, $categoryFilter, $sort) {
         <?php include 'includes/sidebar.php'; ?>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h2 class="mt-4">Seedling Inventory</h2> 
+            <h2 class="mt-4">Seedling Inventory |
+                <span><a href="admin_fertilizer_inventory.php" class="text-decoration-none text-primary">Fertilizer Inventory</a></span></h2> 
             <hr>
 
             <div class="row mb-3">

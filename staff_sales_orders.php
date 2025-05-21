@@ -51,14 +51,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['full_name'], $_POST['a
             exit();
         }
 
-        $sale_sql = "INSERT INTO seedling_for_sale (seedling_variety_id, quantity, status, customer_id) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sale_sql);
+        $order_sql = "INSERT INTO orders (seedling_variety_id, quantity, status, customer_id) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($order_sql);
         if ($stmt === false) {
             die('MySQL prepare error: ' . $conn->error);
         }
         $stmt->bind_param("iisi", $seedling_variety_id, $quantity, $status, $customer_id);
         if (!$stmt->execute()) {
-            die('Failed to insert sale: ' . $stmt->error);
+            die('Failed to insert order: ' . $stmt->error);
         }
 
         $update_inventory_sql = "UPDATE seedling_inventory SET quantity = quantity - ? WHERE seedling_variety_id = ? LIMIT 1";
@@ -71,10 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['full_name'], $_POST['a
     }
 
     $message = ($submit_order == 'reserve') ? 'Reservation successfully placed.' : 'Order successfully placed.';
-echo "<script>alert('$message'); window.location.href='staff_sales_orders.php';</script>";
-exit();
-
-    // echo "<script>alert('Order successfully placed.'); window.location.href='staff_sales_delivery.php';</script>";
+    echo "<script>alert('$message'); window.location.href='staff_sales_orders.php';</script>";
     exit();
 }
 
@@ -107,6 +104,7 @@ while ($row = $result->fetch_assoc()) {
     <title>EJ's Plant Nursery</title>
     <link rel="stylesheet" href="assets/bootstrap-5/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/fontawesome-6.7/css/all.min.css" />
+    <script src="assets/jquery/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -124,6 +122,9 @@ while ($row = $result->fetch_assoc()) {
                 <li class="nav-item">
                     <a class="nav-link" href="staff_sales_inventory.php">Inventory</a>
                 </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="staff_sales_fertilizer.php">Fertilizer</a>
+                </li> -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle active" href="#" id="scheduleDropdown" data-bs-toggle="dropdown">
                         Orders
@@ -133,14 +134,15 @@ while ($row = $result->fetch_assoc()) {
                         <li><a class="dropdown-item" href="staff_sales_reserve_orders.php">Reserve Order</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="staff_sales_report.php">Reports</a></li>
+                <!-- <li class="nav-item"><a class="nav-link" href="staff_sales_report.php">Reports</a></li> -->
+                <li class="nav-item"><a class="nav-link" href="staff_login.php"><i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
         </div>
     </div>
 </nav>
 
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Seedling Delivery</h2>
+    <h2 class=" mb-4">Customer Orders</h2> <hr>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Total: ₱ <span id="totalAmount">0.00</span></h4>

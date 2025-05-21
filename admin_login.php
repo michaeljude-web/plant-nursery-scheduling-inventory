@@ -1,13 +1,29 @@
 <?php
 include 'includes/db.php';
 
+// if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//     $passcode = $_POST['passcode'];
+    
+//     $stmt = $conn->prepare("SELECT id FROM admin WHERE passcode = ?");
+//     $stmt->bind_param("s", $passcode);
+//     $stmt->execute();
+//     $result = $stmt->get_result();
+    
+//     if ($result->num_rows > 0) {
+//         $admin = $result->fetch_assoc();
+//         $_SESSION['admin_id'] = $admin['id'];
+//         header("Location: admin_dashboard.php");
+//         exit();
+//     } else {
+//         $error = "Invalid passcode!";
+//     }
+// }
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $passcode = $_POST['passcode'];
     
-    $stmt = $conn->prepare("SELECT id FROM admin WHERE passcode = ?");
-    $stmt->bind_param("s", $passcode);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $query = "SELECT id FROM admin WHERE passcode = '$passcode'";
+    $result = $conn->query($query);
     
     if ($result->num_rows > 0) {
         $admin = $result->fetch_assoc();
@@ -18,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Invalid passcode!";
     }
 }
+
 ?>
 
 <!DOCTYPE html>

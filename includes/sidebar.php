@@ -25,29 +25,34 @@
             </ul>
         </li>
         <li class="nav-item mb-2">
-            <a class="nav-link text-dark" href="admin_seedling_inventory.php">
-            <i class="fa-solid fa-boxes-stacked me-2 me-2"></i> Inventory
-            </a>
-        </li>
-        <li class="nav-item mb-2">
             <a class="nav-link text-dark dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#fertilizersMenu">
             <i class="fas fa-vial me-2"></i> Fertilizers
             </a>
             <ul class="collapse list-unstyled ps-3" id="fertilizersMenu">
                 <li><a class="nav-link text-dark" href="admin_fertilizer_add.php">Add fertilizers</a></li>
-                <li><a class="nav-link text-dark" href="admin_fertilizer_inventory.php">Inventory</a></li>
-                <li><a class="nav-link text-dark" href="admin_fertilizer_deduction_history.php">Deduction</a></li>
+                <!-- <li><a class="nav-link text-dark" href="admin_fertilizer_inventory.php">Inventory</a></li> -->
+                <!-- <li><a class="nav-link text-dark" href="admin_fertilizer_deduction_history.php">Deduction</a></li> -->
                 <li><a class="nav-link text-dark" href="admin_fertilizer_history.php">History</a></li>
             </ul>
         </li>
         <li class="nav-item mb-2">
-            <a class="nav-link text-dark" href="admin_damage_report.php">
-            <i class="fas fa-triangle-exclamation me-2"></i> Reports
+            <a class="nav-link text-dark" href="admin_seedling_inventory.php">
+            <i class="fa-solid fa-boxes-stacked me-2 me-2"></i>Stock Inventory
             </a>
         </li>
         <li class="nav-item mb-2">
+            <a class="nav-link text-dark" href="admin_inventory_reports.php">
+            <i class="fas fa-triangle-exclamation me-2 me-2"></i>Reports
+            </a>
+        </li>
+        <!-- <li class="nav-item mb-2">
+            <a class="nav-link text-dark" href="admin_damage_report.php">
+            <i class="fas fa-triangle-exclamation me-2"></i> Reports
+            </a>
+        </li> -->
+        <li class="nav-item mb-2">
             <a class="nav-link text-dark" href="admin_delivery_history.php">
-            <i class="fa-solid fa-cart-shopping me-2"></i> Order History
+            <i class="fa-solid fa-cart-shopping me-2"></i> Delivery
             </a>
         </li>
         <li class="nav-item">
